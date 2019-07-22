@@ -1,33 +1,39 @@
-const getState = ({ getStore, setStore }) => {
+const getState = ({ setStore, getStore }) => {
 	return {
 		store: {
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			events: [],
+			meetups: []
 		},
 		actions: {
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+			findMeetupName: meetupID => {
+				let store = getStore();
+				if (store.meetups !== []) {
+					let meetup = store.meetups.filter((item, index) => {
+						if (item.ID == meetupID) {
+							return item;
+						}
+					});
+					if (meetup[0] !== undefined) {
+						return meetup[0].post_title;
+					}
+				}
+			},
+			getMeetupEvents: meetID => {
+				let store = getStore();
+				return store.events.filter(evt => evt.meta_keys._meetup === meetID);
+			},
+			findEvent: eventID => {
+				let store = getStore();
+				if (store.events !== []) {
+					let event = store.events.filter((item, index) => {
+						if (item.ID == eventID) {
+							return item;
+						}
+					});
+					if (event[0] !== undefined) {
+						return event[0];
+					}
+				}
 			}
 		}
 	};
